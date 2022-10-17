@@ -1,0 +1,86 @@
+﻿@model SistemaContas.Mvc.Models.ContasConsultaModel
+@{
+    ViewData["Title"] = "Consulta";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<h5>Consulta de Contas</h5>
+Relação de contas a pagar e receber
+<hr />
+
+@using(Html.BeginForm())
+{
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label>Data de inicio:</label>
+            @Html.TextBoxFor(model => model.DataInicio, new{@class = "form-control", @type = "date"})
+            <span class="text-danger"> @Html.ValidationMessageFor(model => model.DataInicio) </span>
+        </div>
+       <div class="col-md-3">
+            <label>Data de Término:</label>
+            @Html.TextBoxFor(model => model.DataFim, new{@class = "form-control", @type = "date"})
+            <span class="text-danger"> @Html.ValidationMessageFor(model => model.DataFim) </span>
+        </div>
+        <div class="col-md-6">
+            <label>Formato:</label>
+            <div>
+                @Html.RadioButtonFor(model => model.Formato, "Excel")
+                <span>Planilha Excel</span>
+                &nbsp;&nbsp;&nbsp;
+                @Html.RadioButtonFor(model => model.Formato, "Pdf")
+                <span>Documento Pdf</span>
+                 &nbsp;&nbsp;&nbsp;
+                @Html.RadioButtonFor(model => model.Formato, "Html")
+                <span>Grid Html</span>
+            </div>
+            <span class="text-danger"> @Html.ValidationMessageFor(model => model.Formato) </span>
+
+        </div>        
+    </div>   
+  
+  
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <input type="submit" value="Gerar Relatorio" class="btn btn-primary">
+        </div>
+    </div>
+}
+
+@if(Model != null && Model.Contas != null)
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Nome da Conta</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+                <th>Operações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.Contas)
+            {
+                <tr>
+                    <td>@item.Nome</td>
+                    <td>@item.Data.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Valor.ToString("c")</td>
+                    <td> @item.Tipo </td>
+                    <td>
+                        <a href="/Contas/Edicao/@item.IdConta"class="btn btn-primary btn-sm">Editar </a> 
+                        <a href="/Contas/Exclusao/@item.IdConta"class="btn btn-danger btn-sm" onclick="    return confirm('Deseja excluir a conta?');">Excluir </a> 
+                        
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr> 
+                <td colspan="5">
+                    Quantidade de contas: @Model.Contas.Count()
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+}

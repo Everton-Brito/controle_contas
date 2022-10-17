@@ -1,0 +1,75 @@
+﻿@model SistemaContas.Mvc.Models.ContasDashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<h5>Dashboard - Controle de Contas</h5>
+Comparativo de contas a pagar e receber
+<hr />
+
+@using(Html.BeginForm())
+{
+    <div class="row mb-3">
+
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.DataInicio, new{@class = "form-control", @type = "date"})
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.DataInicio) </span>
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(model => model.DataFim, new{@class = "form-control", @type = "date"})
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.DataFim) </span>
+        </div>
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-primary" value="Atualizar Dashboard">
+        </div>
+
+    </div>
+}
+
+<div class="row mt-2">
+    <div class="col-md-12 text-center">
+        <div id="grafico"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <script>
+         var array = [];
+          array.push(['Contas a Receber', @TempData["TotalContasReceber"]]);
+          array.push(['Contas a Pagar', @TempData["TotalContasPagar"]]);
+
+        new Highcharts.Chart({
+                 chart: {
+                      type: 'pie',
+                      renderTo: 'grafico'
+                },
+                 title: {
+                        text: 'Somatório de Contas do período'
+                 },
+                 subtitle: {
+                         text: 'Somatório das contas a pagar e receber'
+                 },
+                 plotOptions: {
+                         pie: {
+                            innerSize: '60%'
+                 }
+                 },
+                 exporting: {
+                         enabled: false
+                 },
+                 credits: {
+                        enabled: false
+                 },
+                 series: [{
+                         data: array
+                 }]
+                 })
+
+    </script>
+}

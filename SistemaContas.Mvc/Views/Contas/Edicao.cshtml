@@ -1,0 +1,48 @@
+﻿@model SistemaContas.Mvc.Models.ContasEdicaoModel
+@{
+    ViewData["Title"] = "Edicao";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<h5>Edição de Contas</h5>
+Utilize o formulário para atualizar os dados da conta
+<hr />
+
+@using(Html.BeginForm())
+{
+    <div>@Html.HiddenFor(model => model.IdConta) </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label>Nome da Conta:</label>
+            @Html.TextBoxFor(model => model.Nome, new{@class = "form-control"})
+            <span class="text-danger"> @Html.ValidationMessageFor(model => model.Nome) </span>
+        </div>
+        <div class="col-md-3">
+            <label>Data da Conta:</label>
+            @Html.TextBoxFor(model => model.Data, new{ @class = "form-control", @type = "date"})
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Data) </span>
+        </div>
+        <div class="col-md-3">
+            <label>Valor da conta</label>
+            @Html.TextBoxFor(model => model.Valor, new{@class = "form-control"})
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Valor) </span>
+        </div>        
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label>Informe o tipo da Conta:</label>
+            @Html.RadioButtonFor(model => model.Tipo, "Receber")
+            <span>Conta a Receber</span>
+            &nbsp;&nbsp;&nbsp;
+            @Html.RadioButtonFor(model => model.Tipo, "Pagar")
+            <span>Conta a Pagar</span>
+        </div>
+        <span class="text-danger"> @Html.ValidationMessageFor(model => model.Tipo) </span>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <input type="submit" value="Salvar Alterações" class="btn btn-primary">
+        </div>
+    </div>
+}
